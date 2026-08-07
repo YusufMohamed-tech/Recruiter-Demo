@@ -15,39 +15,56 @@ export default function CompanyDashboardPage() {
 
   useEffect(() => {
     async function load() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) { setLoading(false); return }
 
-      const { data: userRow } = await supabase.from('users').select('org_id').eq('id', user.id).single()
-      if (!userRow) return
+        // Try fetching org_id from users table, fall back to API
+        const { data: userRow } = await supabase.from('users').select('org_id').eq('id', user.id).single()
 
-      const orgId = userRow.org_id
+        if (!userRow) {
+          // User record might not be readable via RLS yet — use API
+          const res = await fetch('/api/v1/company/dashboard')
+          if (res.ok) {
+            const data = await res.json()
+            setOrgName(data.orgName || '')
+            setStats(data.stats || { jobs: 0, applications: 0, pending: 0, team: 0 })
+            setRecentApps(data.recentApps || [])
+          }
+          setLoading(false)
+          return
+        }
 
-      const { data: org } = await supabase.from('organizations').select('legal_name_en').eq('id', orgId).single()
-      setOrgName(org?.legal_name_en || '')
+        const orgId = userRow.org_id
 
-      const [jobsRes, appsRes, pendingRes, teamRes] = await Promise.all([
-        supabase.from('job_postings').select('*', { count: 'exact', head: true }).eq('org_id', orgId).eq('status', 'published'),
-        supabase.from('seeker_applications').select('*', { count: 'exact', head: true }).eq('org_id', orgId),
-        supabase.from('seeker_applications').select('*', { count: 'exact', head: true }).eq('org_id', orgId).eq('status', 'submitted'),
-        supabase.from('users').select('*', { count: 'exact', head: true }).eq('org_id', orgId),
-      ])
+        const { data: org } = await supabase.from('organizations').select('legal_name_en').eq('id', orgId).single()
+        setOrgName(org?.legal_name_en || '')
 
-      setStats({
-        jobs: jobsRes.count || 0,
-        applications: appsRes.count || 0,
-        pending: pendingRes.count || 0,
-        team: teamRes.count || 0,
-      })
+        const [jobsRes, appsRes, pendingRes, teamRes] = await Promise.all([
+          supabase.from('job_postings').select('*', { count: 'exact', head: true }).eq('org_id', orgId).eq('status', 'published'),
+          supabase.from('seeker_applications').select('*', { count: 'exact', head: true }).eq('org_id', orgId),
+          supabase.from('seeker_applications').select('*', { count: 'exact', head: true }).eq('org_id', orgId).eq('status', 'submitted'),
+          supabase.from('users').select('*', { count: 'exact', head: true }).eq('org_id', orgId),
+        ])
 
-      const { data: recent } = await supabase
-        .from('seeker_applications')
-        .select('id, status, submitted_at, seeker_profiles(first_name_en, last_name_en), job_postings(title_en)')
-        .eq('org_id', orgId)
-        .order('submitted_at', { ascending: false })
-        .limit(5)
+        setStats({
+          jobs: jobsRes.count || 0,
+          applications: appsRes.count || 0,
+          pending: pendingRes.count || 0,
+          team: teamRes.count || 0,
+        })
 
-      setRecentApps(recent || [])
+        const { data: recent } = await supabase
+          .from('seeker_applications')
+          .select('id, status, submitted_at, seeker_profiles(first_name_en, last_name_en), job_postings(title_en)')
+          .eq('org_id', orgId)
+          .order('submitted_at', { ascending: false })
+          .limit(5)
+
+        setRecentApps(recent || [])
+      } catch (e) {
+        console.error('Dashboard load error:', e)
+      }
       setLoading(false)
     }
     load()
