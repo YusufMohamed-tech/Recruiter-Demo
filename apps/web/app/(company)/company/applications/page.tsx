@@ -19,9 +19,9 @@ export default function CompanyApplicationsPage() {
   async function load() {
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user) { setLoading(false); return }
     const { data: userRow } = await supabase.from('users').select('org_id').eq('id', user.id).single()
-    if (!userRow) return
+    if (!userRow) { setLoading(false); return }
 
     let query = supabase
       .from('seeker_applications')

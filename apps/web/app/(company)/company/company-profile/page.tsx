@@ -16,9 +16,9 @@ export default function CompanyProfileEditPage() {
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+      if (!user) { setLoading(false); return }
       const { data: userRow } = await supabase.from('users').select('org_id').eq('id', user.id).single()
-      if (!userRow) return
+      if (!userRow) { setLoading(false); return }
 
       const { data } = await supabase.from('company_profiles').select('*').eq('org_id', userRow.org_id).single()
       setProfile(data)
