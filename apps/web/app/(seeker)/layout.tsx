@@ -6,7 +6,7 @@ import { Home, Search, FileText, User, Bookmark } from 'lucide-react'
 
 const navItems = [
   { href: '/seeker/dashboard', label: 'Home', icon: Home },
-  { href: '/jobs', label: 'Jobs', icon: Search },
+  { href: '/seeker/jobs', label: 'Jobs', icon: Search },
   { href: '/seeker/applications', label: 'Applications', icon: FileText },
   { href: '/seeker/saved-jobs', label: 'Saved', icon: Bookmark },
   { href: '/seeker/profile', label: 'Profile', icon: User },
