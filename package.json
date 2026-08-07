@@ -1,0 +1,20 @@
+{
+  "name": "recruitment-chessboard",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "db:migrate": "supabase db push",
+    "db:seed": "tsx scripts/seed-demo.ts",
+    "db:types": "supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > apps/web/types/database.ts"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0",
+    "tsx": "^4.16.0",
+    "supabase": "^2.0.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

@@ -1,0 +1,72 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "candidates": "Candidates",
+    "applications": "Applications",
+    "jobs": "Jobs",
+    "requisitions": "Requisitions",
+    "offers": "Offers",
+    "readiness": "Employment Readiness",
+    "government": "Government Cases",
+    "interviews": "Interviews",
+    "analytics": "Analytics",
+    "settings": "Settings"
+  },
+  "auth": {
+    "sign_in": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "signing_in": "Signing in…",
+    "invalid_credentials": "Invalid email or password.",
+    "admin_provisioned": "Access is provisioned by your administrator."
+  },
+  "careers": {
+    "title": "Find Your Next Opportunity",
+    "subtitle": "Explore open positions at Chessboard Group",
+    "search_placeholder": "Search jobs…",
+    "filter_department": "Department",
+    "filter_city": "City",
+    "filter_type": "Employment Type",
+    "apply_now": "Apply Now",
+    "posted": "Posted",
+    "deadline": "Deadline",
+    "no_jobs": "No open positions at this time."
+  },
+  "compliance": {
+    "pass": "Pass",
+    "blocked": "Blocked",
+    "warning": "Warning",
+    "manual_review": "Manual Review Required",
+    "override_pending": "Override Pending",
+    "rule_stale": "Rule Stale"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "success": "Saved successfully",
+    "confirm_delete": "Are you sure you want to delete this?",
+    "no_results": "No results found.",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "status": "Status",
+    "actions": "Actions",
+    "view": "View",
+    "back": "Back"
+  },
+  "status": {
+    "draft": "Draft",
+    "pending": "Pending",
+    "active": "Active",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "closed": "Closed",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  }
+}

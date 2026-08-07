@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+apps/web/.next/
+apps/web/out/
+
+# Environment
+.env.local
+.env.production
+.env*.local
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+
+# Generated types (keep database.ts committed for demo)
+
+# Turbo
+.turbo/
+
+# Tokens & Secrets
+.tokens.local
+.env
+.env.*
+
+# OS
+.DS_Store

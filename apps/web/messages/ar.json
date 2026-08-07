@@ -1,0 +1,72 @@
+{
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "candidates": "المرشحون",
+    "applications": "الطلبات",
+    "jobs": "الوظائف",
+    "requisitions": "طلبات التوظيف",
+    "offers": "العروض",
+    "readiness": "الجاهزية الوظيفية",
+    "government": "الحالات الحكومية",
+    "interviews": "المقابلات",
+    "analytics": "التقارير",
+    "settings": "الإعدادات"
+  },
+  "auth": {
+    "sign_in": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "signing_in": "جارٍ تسجيل الدخول…",
+    "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "admin_provisioned": "يتم توفير الوصول من قِبل المسؤول."
+  },
+  "careers": {
+    "title": "ابحث عن فرصتك القادمة",
+    "subtitle": "استكشف الوظائف المتاحة في مجموعة شطرنج",
+    "search_placeholder": "ابحث عن وظيفة…",
+    "filter_department": "القسم",
+    "filter_city": "المدينة",
+    "filter_type": "نوع العمل",
+    "apply_now": "تقدم الآن",
+    "posted": "تاريخ النشر",
+    "deadline": "آخر موعد",
+    "no_jobs": "لا توجد وظائف شاغرة حالياً."
+  },
+  "compliance": {
+    "pass": "مجتاز",
+    "blocked": "محظور",
+    "warning": "تحذير",
+    "manual_review": "يتطلب مراجعة يدوية",
+    "override_pending": "استثناء قيد المراجعة",
+    "rule_stale": "قاعدة منتهية الصلاحية"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "loading": "جارٍ التحميل…",
+    "error": "حدث خطأ ما",
+    "success": "تم الحفظ بنجاح",
+    "confirm_delete": "هل أنت متأكد من الحذف؟",
+    "no_results": "لا توجد نتائج.",
+    "search": "بحث",
+    "filter": "تصفية",
+    "all": "الكل",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "view": "عرض",
+    "back": "رجوع"
+  },
+  "status": {
+    "draft": "مسودة",
+    "pending": "قيد الانتظار",
+    "active": "نشط",
+    "approved": "معتمد",
+    "rejected": "مرفوض",
+    "closed": "مغلق",
+    "completed": "مكتمل",
+    "cancelled": "ملغى"
+  }
+}
