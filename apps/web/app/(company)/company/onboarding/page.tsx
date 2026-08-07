@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createClient } from '@/lib/supabase/client'
 
 const INDUSTRIES = [
   'Technology', 'Healthcare', 'Construction', 'Finance', 'Education',
@@ -24,7 +23,6 @@ const SAUDI_CITIES = [
 
 export default function CompanyOnboardingPage() {
   const router = useRouter()
-  const supabase = createClient()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -49,62 +47,22 @@ export default function CompanyOnboardingPage() {
     setLoading(true)
     setError(null)
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setError('Not authenticated'); setLoading(false); return }
+    const res = await fetch('/api/v1/company/onboarding', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
 
-    const slug = form.company_name_en
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
+    const data = await res.json()
 
-    // Create organization
-    const { data: org, error: orgError } = await supabase
-      .from('organizations')
-      .insert({
-        legal_name_en: form.company_name_en,
-        legal_name_ar: form.company_name_ar || form.company_name_en,
-        cr_number: form.cr_number || null,
-        headquarters_city: form.headquarters,
-        website: form.website || null,
-      })
-      .select()
-      .single()
+    if (!res.ok) {
+      setError(data.error || 'Something went wrong')
+      setLoading(false)
+      return
+    }
 
-    if (orgError) { setError(orgError.message); setLoading(false); return }
-
-    // Create user record linked to org
-    const { error: userError } = await supabase
-      .from('users')
-      .insert({
-        id: user.id,
-        org_id: org.id,
-        email: user.email!,
-        name_en: user.user_metadata?.full_name || user.email!.split('@')[0],
-        is_active: true,
-      })
-
-    if (userError) { setError(userError.message); setLoading(false); return }
-
-    // Create company profile
-    const { error: profileError } = await supabase
-      .from('company_profiles')
-      .insert({
-        org_id: org.id,
-        display_name_en: form.company_name_en,
-        display_name_ar: form.company_name_ar || null,
-        slug,
-        industry: form.industry || null,
-        company_size: form.company_size || null,
-        headquarters: form.headquarters || null,
-        website: form.website || null,
-        description_en: form.description_en || null,
-        tagline_en: form.tagline_en || null,
-      })
-
-    if (profileError) { setError(profileError.message); setLoading(false); return }
-
-    router.push('/company/dashboard')
     router.refresh()
+    router.push('/company/dashboard')
   }
 
   return (
