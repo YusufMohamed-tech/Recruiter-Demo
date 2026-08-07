@@ -70,6 +70,19 @@ export default function CompanyDashboardPage() {
     load()
   }, [])
 
+  const [seeding, setSeeding] = useState(false)
+  const [seeded, setSeeded] = useState(false)
+
+  async function seedData() {
+    setSeeding(true)
+    const res = await fetch('/api/v1/company/seed', { method: 'POST' })
+    if (res.ok) {
+      setSeeded(true)
+      window.location.reload()
+    }
+    setSeeding(false)
+  }
+
   if (loading) return <div className="animate-pulse space-y-4"><div className="h-32 bg-gray-200 rounded-lg" /><div className="h-64 bg-gray-200 rounded-lg" /></div>
 
   return (
@@ -79,9 +92,16 @@ export default function CompanyDashboardPage() {
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">{orgName}</p>
         </div>
-        <Link href="/company/jobs/new">
-          <Button><Plus className="h-4 w-4 mr-2" />Post a Job</Button>
-        </Link>
+        <div className="flex gap-2">
+          {!seeded && stats.jobs === 0 && (
+            <Button variant="outline" onClick={seedData} disabled={seeding}>
+              {seeding ? 'Seeding…' : 'Load Demo Data'}
+            </Button>
+          )}
+          <Link href="/company/jobs/new">
+            <Button><Plus className="h-4 w-4 mr-2" />Post a Job</Button>
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
