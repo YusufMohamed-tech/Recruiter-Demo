@@ -69,8 +69,11 @@ INSERT INTO role_permissions (role_id, permission) VALUES
   -- Gov Relations
   ('20000000-0000-0000-0000-000000000006', 'readiness.manage');
 
+-- Make created_by nullable for seeding (no auth users exist yet)
+ALTER TABLE compliance_rules ALTER COLUMN created_by DROP NOT NULL;
+
 -- Saudi Compliance Rules
-INSERT INTO compliance_rules (org_id, code, name_ar, name_en, rule_type, applies_to, condition_json, result_if_fail, effective_from, review_due_at, created_by)
+INSERT INTO compliance_rules (org_id, code, name_ar, name_en, rule_type, applies_to, condition_json, result_if_fail, effective_from, review_due_at)
 SELECT
   '00000000-0000-0000-0000-000000000001',
   code, name_ar, name_en, rule_type,
@@ -78,8 +81,7 @@ SELECT
   condition_json::jsonb,
   result_if_fail,
   effective_from::date,
-  review_due_at::date,
-  (SELECT id FROM users WHERE org_id = '00000000-0000-0000-0000-000000000001' LIMIT 1)
+  review_due_at::date
 FROM (VALUES
   ('KSA-001', 'نطاقات — الحد الأدنى للسعودة', 'Nitaqat — Minimum Saudization', 'nitaqat', '{requisition}',
    '{"field":"saudization_pct","operator":"gte","value":40}', 'BLOCKED', '2024-01-01', '2025-12-31'),
