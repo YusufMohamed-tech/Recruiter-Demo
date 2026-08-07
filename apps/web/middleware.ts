@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
 
   const isPublic = pathname === '/' ||
     pathname.startsWith('/jobs') ||
-    pathname.startsWith('/company/') ||
+    pathname.startsWith('/careers') ||
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
     pathname.startsWith('/forgot-password') ||

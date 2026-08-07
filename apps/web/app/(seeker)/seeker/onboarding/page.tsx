@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -27,7 +27,26 @@ export default function SeekerOnboardingPage() {
   const supabase = createClient()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [checking, setChecking] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function checkExisting() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { setChecking(false); return }
+      const { data: existing } = await supabase
+        .from('seeker_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+      if (existing) {
+        router.push('/seeker/dashboard')
+        return
+      }
+      setChecking(false)
+    }
+    checkExisting()
+  }, [])
 
   const [form, setForm] = useState({
     first_name_en: '',
@@ -59,7 +78,7 @@ export default function SeekerOnboardingPage() {
 
     const skillsArray = form.skills.split(',').map(s => s.trim()).filter(Boolean)
 
-    const { error: insertError } = await supabase.from('seeker_profiles').insert({
+    const { error: insertError } = await supabase.from('seeker_profiles').upsert({
       user_id: user.id,
       first_name_en: form.first_name_en,
       last_name_en: form.last_name_en,
@@ -79,16 +98,24 @@ export default function SeekerOnboardingPage() {
       bio: form.bio || null,
       profile_completed: true,
       profile_completion_pct: 80,
-    })
+    }, { onConflict: 'user_id' })
 
     if (insertError) {
+      if (insertError.code === '23505') {
+        router.push('/seeker/dashboard')
+        return
+      }
       setError(insertError.message)
       setLoading(false)
       return
     }
 
-    router.push('/seeker/dashboard')
     router.refresh()
+    router.push('/seeker/dashboard')
+  }
+
+  if (checking) {
+    return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse h-8 w-32 bg-gray-200 rounded" /></div>
   }
 
   return (
